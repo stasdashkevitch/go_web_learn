@@ -1,3 +1,17 @@
+// Package classification of Product API
+//
+// # Documentation for Product API
+//
+// Shemes: http
+// BasePath: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+// swagger:meta
 package handlers
 
 import (
@@ -11,32 +25,32 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// a list of products returns in the  response
+// swagger:response productsResponse
+type productsResponseWrapper struct {
+	// All products in the systems
+	// in: body
+	Body []data.Product
+}
+
+// swagger:response noContent
+type productNocontent struct {
+}
+
+// swagger:parameters deleteProduct
+type productIDParameterWrapper struct {
+	// The id of the product to delete from the database
+	// in: path
+	// required: yes
+	ID int `json:"id"`
+}
+
 type Products struct {
 	l *log.Logger
 }
 
 func NewProducts(l *log.Logger) *Products {
 	return &Products{l}
-}
-
-func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
-	p.l.Println("Handle GET products")
-	lp := data.GetProducts()
-	// мы должны взратить клиенту все в виде json
-	// d, err := json.Marshal(lp)
-	// if err != nil {
-	// 	http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
-	// }
-	//
-	// rw.Write(d)
-
-	// у метода Marshal есть проблема - мы алоцируем память
-	// проще использовать Encode который будет сразу записывать результат в output stream
-
-	err := lp.ToJSON(rw)
-	if err != nil {
-		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
-	}
 }
 
 func (p *Products) AddProduct(rw http.ResponseWriter, r *http.Request) {

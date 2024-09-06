@@ -1,0 +1,74 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    Product:
+        properties:
+            description:
+                type: string
+                x-go-name: Description
+            id:
+                description: the id for Product
+                format: int64
+                type: integer
+                x-go-name: ID
+            name:
+                type: string
+                x-go-name: Name
+            price:
+                format: float
+                type: number
+                x-go-name: Price
+            sku:
+                type: string
+                x-go-name: SKU
+        required:
+            - id
+        type: object
+        x-go-package: micro/data
+info:
+    description: |-
+        # Documentation for Product API
+
+        Shemes: http
+    title: of Product API
+    version: 1.0.0
+paths:
+    /:
+        get:
+            description: Returns a list of products
+            operationId: listProducts
+            responses:
+                "200":
+                    $ref: '#/responses/productsResponse'
+            tags:
+                - products
+    /{id}:
+        delete:
+            description: DeleteProducts deletes a product from database
+            operationId: deleteProduct
+            parameters:
+                - description: The id of the product to delete from the database
+                  format: int64
+                  in: path
+                  name: id
+                  required: true
+                  type: integer
+                  x-go-name: ID
+            responses:
+                "201":
+                    $ref: '#/responses/noContent'
+            tags:
+                - products
+produces:
+    - application/json
+responses:
+    noContent:
+        description: ""
+    productsResponse:
+        description: a list of products returns in the  response
+        schema:
+            items:
+                $ref: '#/definitions/Product'
+            type: array
+swagger: "2.0"
